@@ -49,7 +49,7 @@ class Field_general_ext
    * @access  private
    * @var     string
    */
-	$asset_url = ;
+	var $assets_url = '';
   
 	/**
 	* Extension version
@@ -107,15 +107,16 @@ class Field_general_ext
    */
   function __construct($settings='')
   {
-    
+    global $PREFS;
     // Initialise the class name.
 		$this->class_name = strtolower(get_class($this));
+		$this->assets_url = $PREFS->ini('theme_folder_url') . $this->class_name . '/assets/';
+    $this->ajax_url = str_replace('&amp;', '&', $this->settings_url);
+    $this->site_id = $PREFS->ini('site_id');
+    
 		// Retrieve the settings from the database.
     $this->_refresh_settings();
     
-    $this->img_dir_url    = "extensions/{$this->class_name}/assets/styles/images/";
-		$this->css_dir_url    = "extensions/{$this->class_name}/assets/styles/";
-		$this->js_dir_url     = "extensions/{$this->class_name}/assets/scripts/";
 		
     /**
 		 * ----------------------------------------------------
@@ -285,20 +286,15 @@ class Field_general_ext
 	 *
 	 * @access	private
 	 */
-	function _settings_form_headers()
-	{
-	  global $PREFS;
-	  
-	  $asset_url = $PREFS->ini('theme_folder_url') . $this->class_name . '/assets/';
-		$ajax_url = str_replace('&amp;', '&', $this->settings_url);
-		
-		$r  = '';
-		$r .= '<link rel="stylesheet" type="text/css" media="screen" href="' . $this->assets_url . 'styles/cp.css">';
-		$r .= '<script type="text/javascript" src="' . $this->assets_url . 'scripts/cp.js"></script>';
+  function _settings_form_headers()
+  {   
+    $r  = '';
+    $r .= '<link rel="stylesheet" type="text/css" media="screen" href="' . $this->assets_url . 'styles/cp.css">';
+    $r .= '<script type="text/javascript" src="' . $this->assets_url . 'scripts/cp.js"></script>';
 
-		// All done.
-		return $r;
-	}
+    // All done.
+    return $r;
+  }
   
 	
 	/**
@@ -555,7 +551,7 @@ class Field_general_ext
     $current = (array_key_exists($site_id, $current)) ? $current[$site_id] : array();
 
 		// Start building the page.
-    $headers        = $this->_settings_form_headers();  // Additional CSS and JS headers.   
+    $headers        = $this->_settings_form_headers();  // Additional CSS and JS headers.
 		$breadcrumbs 		= $this->_settings_form_breadcrumbs();	// Breadcrumbs.
 		$browser_title 	= $LANG->line('extension_settings');		// Browser title.
 		
