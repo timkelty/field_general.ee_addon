@@ -12,7 +12,8 @@ I'll be ditching the "order" text inputs for drag and drop shortly (with [@kswed
 
 ## EE2?
 
-While the publish form in EE2 is much more easily customized, the same problem exists in that you can only select from fields in the single field group assigned to that channel. Enter Field General...except the hook we really need `publish_form_field_query` doesn't exist in EE2 as of yet. Once it does, I'll make an EE2 version real quick like.
+While the publish form in EE2 is much more easily customized, the same problem exists in that you can only select from fields in the single field group assigned to that channel. Enter Field General...except the hook we use `publish_form_field_query` doesn't exist in EE2 as of yet. So it seems I'll need to rework things a bit. Looks like it should [still be possible][3], however...
 
 [1]: http://devot-ee.com/add-ons/gypsy/  "Gypsy"
 [2]: http://github.com/kswedberg         "Karl Swedberg"
+[3]: http://expressionengine.com/forums/viewthread/160740/
