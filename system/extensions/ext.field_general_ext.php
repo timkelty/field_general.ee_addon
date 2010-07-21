@@ -43,6 +43,14 @@ class Field_general_ext
 	*/
 	var $name	 = F_GEN_name;
 
+  /**
+   * The URL path to the assets directory.
+   *
+   * @access  private
+   * @var     string
+   */
+	$asset_url = ;
+  
 	/**
 	* Extension version
 	* @var string
@@ -105,6 +113,10 @@ class Field_general_ext
 		// Retrieve the settings from the database.
     $this->_refresh_settings();
     
+    $this->img_dir_url    = "extensions/{$this->class_name}/assets/styles/images/";
+		$this->css_dir_url    = "extensions/{$this->class_name}/assets/styles/";
+		$this->js_dir_url     = "extensions/{$this->class_name}/assets/scripts/";
+		
     /**
 		 * ----------------------------------------------------
 		 * Now for the conditional initialisation stuff.
@@ -267,7 +279,28 @@ class Field_general_ext
 	  
 		return $DSP->qdiv('itemWrapperTop', $DSP->input_submit($LANG->line('save_settings'), 'save_settings', 'id="save_settings"'));
 	}
+	
+	/**
+	 * Builds the custom page headers part of the UI.
+	 *
+	 * @access	private
+	 */
+	function _settings_form_headers()
+	{
+	  global $PREFS;
+	  
+	  $asset_url = $PREFS->ini('theme_folder_url') . $this->class_name . '/assets/';
+		$ajax_url = str_replace('&amp;', '&', $this->settings_url);
 		
+		$r  = '';
+		$r .= '<link rel="stylesheet" type="text/css" media="screen" href="' . $this->assets_url . 'styles/cp.css">';
+		$r .= '<script type="text/javascript" src="' . $this->assets_url . 'scripts/cp.js"></script>';
+
+		// All done.
+		return $r;
+	}
+  
+	
 	/**
 	 * Refreshes the settings. If this is the first time here, the settings are
 	 * pulled from the database. If there is POST data to process, we do the
@@ -522,7 +555,7 @@ class Field_general_ext
     $current = (array_key_exists($site_id, $current)) ? $current[$site_id] : array();
 
 		// Start building the page.
-		// $headers 				= $this->_settings_form_headers();  // Additional CSS and JS headers.		
+    $headers        = $this->_settings_form_headers();  // Additional CSS and JS headers.   
 		$breadcrumbs 		= $this->_settings_form_breadcrumbs();	// Breadcrumbs.
 		$browser_title 	= $LANG->line('extension_settings');		// Browser title.
 		
@@ -615,7 +648,7 @@ class Field_general_ext
 		$body .= $DSP->form_c();
 		
 		// Output everything.
-		// $DSP->extra_header	.= $headers;
+    $DSP->extra_header  .= $headers;
 		$DSP->title 				= $browser_title;
 		$DSP->crumbline 		= TRUE;
 		$DSP->crumb 				= $breadcrumbs;
