@@ -168,7 +168,7 @@ class Field_general_ext
 		// Register a new source.
 		if ($this->settings[$site_id]['update_check'] == 'y')
 		{
-			$sources[] = 'http://labs.fusionary.com/addons/versions.xml';
+			$sources[] = 'http://github.com/timkelty/versions/raw/master/versions.xml';
 		}
 		
 		return $sources;
