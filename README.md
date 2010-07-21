@@ -1,6 +1,6 @@
 # Field General Addon for ExpressionEngine 1.x
 
-Field General lets you assign multiple field groups to any weblog/channel. This lets you reuse and share sets of fields, rather than having to duplicate them for each channel. [Gypsy][1] has been a popular solution to this problem, but in my experience can become difficult to manage and control the order of your fields.
+Field General lets you assign multiple field groups to any weblog/channel. This lets you reuse and share sets of fields, rather than having to duplicate them for each channel. [Gypsy][1] has been a popular solution to this problem, but in my experience can become difficult to manage and control the order of your fields. With Field General, you an also **share field groups across multiple MSM sites**!
 
 ## Usage
 
