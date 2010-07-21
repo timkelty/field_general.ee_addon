@@ -563,9 +563,10 @@ class Field_general_ext
       
     foreach ($query_weblogs->result as $weblog)
     {
-      $body .= $DSP->table_open(array('class' => 'tableBorder', 'style' => 'margin-top: 18px; width: 100%;'));
+      $body .= $DSP->table_open(array('class' => 'tableBorder table-sortable', 'style' => 'margin-top: 18px; width: 100%;'));
   		
       // weblog headers
+      $body .= '<thead>';
       $body .= $DSP->tr();    
       $body .= $DSP->td('tableHeading', '', '3');
       $body .= $weblog['blog_title'];
@@ -584,7 +585,9 @@ class Field_general_ext
       $body .= $DSP->td_c();
             
       $body .= $DSP->tr_c();
+      $body .= '</thead>';
       
+      $body .= '<tbody>';
       // field group row
       foreach ($query_field_groups->result as $field_group) {
         $stripe_class = (@$stripe_class == 'tableCellOne') ? 'tableCellTwo': 'tableCellOne';
@@ -592,7 +595,7 @@ class Field_general_ext
         $body .= $DSP->tr();
         
         $body .= $DSP->td($stripe_class, '5%');
-        $body .= $DSP->input_text('weblogs[' . $weblog['weblog_id'] . '][field_groups][' . $field_group['group_id'] . '][order]', $fg_settings['order'], '4', '' , '', '30px');
+        $body .= $DSP->input_hidden('weblogs[' . $weblog['weblog_id'] . '][field_groups][' . $field_group['group_id'] . '][order]', $fg_settings['order'], '4', '' , '', '30px');
         $body .= $DSP->td_c();
         
         $body .= $DSP->td($stripe_class);
@@ -623,7 +626,8 @@ class Field_general_ext
 
         $body .= $DSP->tr_c();
       }
-            
+      $body .= '</tbody>';
+      $body .= $DSP->table_close();
     }
 	  
     // Check for updates / save settings.
