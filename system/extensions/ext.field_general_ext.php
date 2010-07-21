@@ -169,8 +169,7 @@ class Field_general_ext
 	 */
 	function lg_addon_update_register_source($sources)
 	{
-		global $EXT, $PREFS;
-		$site_id	= $PREFS->ini('site_id');
+		global $EXT;
 		
 		// Retrieve the data from the previous call, if applicable.
 		if ($EXT->last_call !== FALSE)
@@ -179,9 +178,9 @@ class Field_general_ext
 		}
 		
 		// Register a new source.
-		if ($this->settings[$site_id]['update_check'] == 'y')
+		if ($this->settings[$this->site_id]['update_check'] == 'y')
 		{
-			$sources[] = 'http://github.com/timkelty/versions/raw/master/versions.xml';
+			$sources[] = 'http://github.com/timkelty/field_general.ee_addon/raw/master/versions.xml';
 		}
 		
 		return $sources;
@@ -218,9 +217,6 @@ class Field_general_ext
 	{
 		global $DSP, $LANG, $PREFS;
 		
-		// Site ID
-    $site_id = $PREFS->ini('site_id');
-    
 		$r  = '';
 		
 		// Automatic updates.
@@ -251,7 +247,7 @@ class Field_general_ext
 		
 		$r .= $DSP->td_c();
 		
-		$update_check = isset($this->settings[$site_id]['update_check']) ? $this->settings[$site_id]['update_check'] : 'y';
+		$update_check = isset($this->settings[$this->site_id]['update_check']) ? $this->settings[$this->site_id]['update_check'] : 'y';
 		
 		$r .= $DSP->td('tableCellOne', '60%');
 		
@@ -309,7 +305,6 @@ class Field_general_ext
     global $DB, $REGX, $PREFS;
 		
 		$settings = FALSE;		// Assume no settings
-		$site_id	= $PREFS->ini('site_id');
 		
 		// Check if we've already retrieved the settings from the database. If not, do it.
 		if (isset($this->settings) === FALSE)
@@ -324,15 +319,15 @@ class Field_general_ext
 		}
 		
 		// Fill in the gaps in our settings array.
-		if ( ! isset($this->settings[$site_id]['weblogs'])) $this->settings[$site_id]['weblogs'] = array();
+		if ( ! isset($this->settings[$this->site_id]['weblogs'])) $this->settings[$this->site_id]['weblogs'] = array();
 	
     // Update our settings with any form submission data.				
-		if (isset($_POST['update_check']) === TRUE) $this->settings[$site_id]['update_check'] = $_POST['update_check'];
+		if (isset($_POST['update_check']) === TRUE) $this->settings[$this->site_id]['update_check'] = $_POST['update_check'];
 		
     // Process weblog groups
 		if (isset($_POST['weblogs']) === TRUE)
 		{
-      $this->settings[$site_id]['weblogs'] = $_POST['weblogs']; 		 
+      $this->settings[$this->site_id]['weblogs'] = $_POST['weblogs']; 		 
 		}
 		return $settings;
   }
@@ -434,11 +429,8 @@ class Field_general_ext
 	function _get_fields($obj, $field_group)
 	{
 		global $DB, $DSP, $EXT, $LANG, $PREFS, $CURRENT_WEBLOG_ID;
-				
-    // Site ID
-    $site_id = $PREFS->ini('site_id');
-    
-    $groups = $this->settings[$site_id]['weblogs'][$CURRENT_WEBLOG_ID]['field_groups'];
+				    
+    $groups = $this->settings[$this->site_id]['weblogs'][$CURRENT_WEBLOG_ID]['field_groups'];
     $groups_filtered = array();
     
     // sort groups by order
@@ -524,9 +516,6 @@ class Field_general_ext
 			print '</pre>';
 		}
 		
-	  // Site ID
-		$site_id	= $PREFS->ini('site_id');
-  
 		// AJAX requests are dealt with separately, by show_full_control_panel_end.
 		if ($IN->GBL('ajax_request') === 'y')
 		{
@@ -542,13 +531,13 @@ class Field_general_ext
 
     $query_weblogs = $DB->query("SELECT weblog_id, blog_title, field_group
                                  FROM exp_weblogs 							  
-                                 WHERE site_id = " . $site_id . "
+                                 WHERE site_id = " . $this->site_id . "
                                  ORDER BY blog_title");
  		// get the list of installed sites
  		$query_sites = $DB->query("SELECT site_id, site_label FROM exp_sites");
     
  		// Only grab settings for the current site (if they exist)
-    $current = (array_key_exists($site_id, $current)) ? $current[$site_id] : array();
+    $current = (array_key_exists($this->site_id, $current)) ? $current[$this->site_id] : array();
 
 		// Start building the page.
     $headers        = $this->_settings_form_headers();  // Additional CSS and JS headers.
