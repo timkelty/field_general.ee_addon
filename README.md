@@ -16,4 +16,4 @@ While the publish form in EE2 is much more easily customized, the same problem e
 
 [1]: http://devot-ee.com/add-ons/gypsy/  "Gypsy"
 [2]: http://github.com/kswedberg         "Karl Swedberg"
-[3]: http://expressionengine.com/forums/viewthread/160740/
+[3]: http://expressionengine.com/forums/viewthread/160740#g9
