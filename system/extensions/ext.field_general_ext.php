@@ -433,12 +433,8 @@ class Field_general_ext
     $groups = $this->settings[$this->site_id]['weblogs'][$CURRENT_WEBLOG_ID]['field_groups'];
     $groups_filtered = array();
     
-    // sort groups by order
-    function _sort_groups($a, $b) {
-      return ($a['order'] < $b['order']) ? -1 : 1;
-    }
-    uasort($groups, '_sort_groups');
-    
+    uasort($groups, array($this, '_sort_groups'));
+
     // build string
     foreach($groups as $gk => $gv)
     {
@@ -588,14 +584,40 @@ class Field_general_ext
       $body .= '</thead>';
       
       $body .= '<tbody>';
+      
+      $field_groups = $query_field_groups->result;
+      $max = array();
+      
+      // add order from settings, find max order
+      foreach ($field_groups as $k => $v)
+      {
+        $field_groups[$k]['order'] = @$current['weblogs'][$weblog['weblog_id']]['field_groups'][$v['group_id']]['order'];
+        $max[] = $field_groups[$k]['order'];
+      }
+      $max = max($max);
+      
+      // add max if there is none
+      foreach ($field_groups as $k => $v)
+      {
+        if ( ! $v['order'])
+        {
+          $max++;
+          $field_groups[$k]['order'] = $max;
+        }
+      }
+      
+      // sort by order
+      uasort($field_groups, array($this, '_sort_groups'));
+      
       // field group row
-      foreach ($query_field_groups->result as $field_group) {
+      foreach ($field_groups as $field_group) {
         $stripe_class = (@$stripe_class == 'tableCellOne') ? 'tableCellTwo': 'tableCellOne';
         $fg_settings = @$current['weblogs'][$weblog['weblog_id']]['field_groups'][$field_group['group_id']];
+                
         $body .= $DSP->tr();
         
         $body .= $DSP->td($stripe_class, '5%');
-        $body .= $DSP->input_text('weblogs[' . $weblog['weblog_id'] . '][field_groups][' . $field_group['group_id'] . '][order]', $fg_settings['order'], '4', '' , '', '30px');
+        $body .= $DSP->input_text('weblogs[' . $weblog['weblog_id'] . '][field_groups][' . $field_group['group_id'] . '][order]', $field_group['order'], '4', '' , '', '30px');
         $body .= $DSP->td_c();
         
         $body .= $DSP->td($stripe_class);
@@ -642,6 +664,12 @@ class Field_general_ext
 		$DSP->crumbline 		= TRUE;
 		$DSP->crumb 				= $breadcrumbs;
 		$DSP->body 					= $body;
-	}	
+	}
+	
+	// sort groups by order
+  function _sort_groups($a, $b) {
+    return ($a['order'] < $b['order']) ? -1 : 1;
+  }
+  	
 }
 ?>
