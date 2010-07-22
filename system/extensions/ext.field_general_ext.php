@@ -588,10 +588,11 @@ class Field_general_ext
       $field_groups = $query_field_groups->result;
       $max = array();
       
-      // add order from settings, find max order
+      // merge in order and active from settings, find max order
       foreach ($field_groups as $k => $v)
       {
         $field_groups[$k]['order'] = @$current['weblogs'][$weblog['weblog_id']]['field_groups'][$v['group_id']]['order'];
+        $field_groups[$k]['active'] = @$current['weblogs'][$weblog['weblog_id']]['field_groups'][$v['group_id']]['active'];
         $max[] = $field_groups[$k]['order'];
       }
       $max = max($max);
@@ -612,8 +613,7 @@ class Field_general_ext
       // field group row
       foreach ($field_groups as $field_group) {
         $stripe_class = (@$stripe_class == 'tableCellOne') ? 'tableCellTwo': 'tableCellOne';
-        $fg_settings = @$current['weblogs'][$weblog['weblog_id']]['field_groups'][$field_group['group_id']];
-                
+        
         $body .= $DSP->tr();
         
         $body .= $DSP->td($stripe_class, '5%');
@@ -640,9 +640,9 @@ class Field_general_ext
         $body .= $DSP->td($stripe_class);
         
         $body .= '<label style="cursor:pointer; margin-right: 10px">' . $LANG->line('on');
-        $body .= $DSP->input_radio('weblogs[' . $weblog['weblog_id'] . '][field_groups][' . $field_group['group_id'] . '][active]', 'y', ($fg_settings['active'] == 'y') ? 1 : 0);
+        $body .= $DSP->input_radio('weblogs[' . $weblog['weblog_id'] . '][field_groups][' . $field_group['group_id'] . '][active]', 'y', ($field_group['active'] == 'y') ? 1 : 0);
         $body .= '</label><label style="cursor:pointer">' . $LANG->line('off');
-        $body .= $DSP->input_radio('weblogs[' . $weblog['weblog_id'] . '][field_groups][' . $field_group['group_id'] . '][active]', 'n', ($fg_settings['active'] != 'y') ? 1 : 0);
+        $body .= $DSP->input_radio('weblogs[' . $weblog['weblog_id'] . '][field_groups][' . $field_group['group_id'] . '][active]', 'n', ($field_group['active'] != 'y') ? 1 : 0);
         $body .= '</label>';
         $body .= $DSP->td_c();
 
