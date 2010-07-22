@@ -595,7 +595,7 @@ class Field_general_ext
         $body .= $DSP->tr();
         
         $body .= $DSP->td($stripe_class, '5%');
-        $body .= $DSP->input_hidden('weblogs[' . $weblog['weblog_id'] . '][field_groups][' . $field_group['group_id'] . '][order]', $fg_settings['order'], '4', '' , '', '30px');
+        $body .= $DSP->input_text('weblogs[' . $weblog['weblog_id'] . '][field_groups][' . $field_group['group_id'] . '][order]', $fg_settings['order'], '4', '' , '', '30px');
         $body .= $DSP->td_c();
         
         $body .= $DSP->td($stripe_class);
