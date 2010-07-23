@@ -2,7 +2,7 @@
 
 $L = array(
   
-	'extension_name'				=> 'Field Control',
+	'extension_name'				=> 'Field General',
 	'extension_settings'		=> 'Extension Settings',
 	'utilities'							=> 'Utilities',
 	'extensions_manager'		=> 'Extensions Manager',

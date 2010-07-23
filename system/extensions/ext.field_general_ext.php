@@ -18,7 +18,7 @@ if ( ! defined('EXT'))
 
 if ( ! defined('F_GEN_version'))
 {
-	define('F_GEN_version', '1.0.0');
+	define('F_GEN_version', '1.0.2');
 	define('F_GEN_docs_url', '');
 	define("F_GEN_name", "Field General");
 }
