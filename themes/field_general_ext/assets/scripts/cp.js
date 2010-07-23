@@ -1,7 +1,11 @@
 (function($) {
 
 $(document).ready(function() {
-
+  $('label.expander').bind('click', function() {
+    var collapse = !$(this).find('input').is(':checked');
+    $(this).closest('thead').next('tbody').toggleClass('collapsed', collapse);
+  });
+  
   $('table.table-sortable').children('tbody').each(function(index) {
     var $tbody = $(this);
     var $save = $('#save_settings').clone().attr('id', function() {
@@ -83,7 +87,7 @@ $.fn.toggleDisabled = function(cls) {
   var cls = cls || 'disabled';
   return this.each(function(index) {
     var $this = $(this);
-    $this.toggleClass('disabled', $this.find('input:radio:checked')[0].value === 'n');
+    $this.toggleClass('disabled', $this.find('input:radio:checked').val() !== 'y');
   });
 
 };

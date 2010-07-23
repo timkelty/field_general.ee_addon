@@ -13,3 +13,6 @@ table.table-sortable thead .submit {
 .tableCellTwo {
   background-color: #E5EAF0;
 }
+.table-sortable tbody.collapsed {
+  display: none;
+}

@@ -22,7 +22,7 @@ $L = array(
   'off'        		        => 'Off',
   'yes'        		        => 'Yes',
   'no'        		        => 'No',
-
+  'expand'                => 'Expand',
 // Fin.
 '' => ''
 );

@@ -562,9 +562,15 @@ class Field_general_ext
       $body .= $DSP->table_open(array('class' => 'tableBorder table-sortable', 'style' => 'margin-top: 18px; width: 100%;'));
   		
       // weblog headers
+      $expanded = @$current['weblogs'][$weblog['weblog_id']]['expanded'] == 'y';
       $body .= '<thead>';
       $body .= $DSP->tr();    
       $body .= $DSP->td('tableHeading', '', '3');
+      $body .= '<label class="expander" style="cursor:pointer; margin-right: 10px">' . $LANG->line('expand');
+      
+      $body .= $DSP->input_checkbox('weblogs[' . $weblog['weblog_id'] . '][expanded]', 'y', ($expanded) ? 1 : 0);
+      $body .= '</label>';
+      
       $body .= $weblog['blog_title'];
       $body .= $DSP->td_c();
       $body .= $DSP->tr_c();
@@ -583,7 +589,7 @@ class Field_general_ext
       $body .= $DSP->tr_c();
       $body .= '</thead>';
       
-      $body .= '<tbody>';
+      $body .= '<tbody class="' . ($expanded ? 'expanded' : 'collapsed') . '">';
       
       $field_groups = $query_field_groups->result;
       $max = array();
