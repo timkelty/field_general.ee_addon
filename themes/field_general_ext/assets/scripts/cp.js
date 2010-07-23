@@ -1,18 +1,28 @@
 (function($) {
 
 $(document).ready(function() {
-  $('label.expander').bind('click', function() {
-    var collapse = !$(this).find('input').is(':checked');
-    $(this).closest('thead').next('tbody').toggleClass('collapsed', collapse);
+  $('tr.weblog-head')
+  .click(function(event) {
+      var $checkbox = $(this).find('label.expander input'),
+          cb = $checkbox[0];
+          
+    if (!$(event.target).closest('label.expander').length) {
+      cb.checked = !cb.checked;
+    }
+
+    var collapse = !$checkbox.is(':checked');
+    $(this).closest('table').toggleClass('collapsed', collapse);
+    
   });
+    
   
   $('table.table-sortable').children('tbody').each(function(index) {
     var $tbody = $(this);
     var $save = $('#save_settings').clone().attr('id', function() {
       this.id + index;
-    });
+    }).wrap('<div class="box"></div>').parent();
     
-    $tbody.prev().find('td.tableHeading').append($save);
+    $tbody.parent().after($save);
 
     // set "disabled" state of row based on checked radio
     // and other initializing goodness
@@ -84,7 +94,7 @@ function setCellWidths() {
 }
 
 $.fn.toggleDisabled = function(cls) {
-  var cls = cls || 'disabled';
+  cls = cls || 'disabled';
   return this.each(function(index) {
     var $this = $(this);
     $this.toggleClass('disabled', $this.find('input:radio:checked').val() !== 'y');

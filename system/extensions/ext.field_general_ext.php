@@ -224,7 +224,7 @@ class Field_general_ext
 			array(
 				'class' 	=> 'tableBorder',
 				'border' 	=> '0',
-				'style' 	=> 'width : 100%; margin-top : 1em;',
+				'style' 	=> 'width : 100%; ',
 				)
 			);
 			
@@ -274,7 +274,7 @@ class Field_general_ext
 	{
 	  global $DSP, $LANG;
 	  
-		return $DSP->qdiv('itemWrapperTop', $DSP->input_submit($LANG->line('save_settings'), 'save_settings', 'id="save_settings"'));
+		return $DSP->qdiv('box itemWrapperTop', $DSP->input_submit($LANG->line('save_settings'), 'save_settings', 'id="save_settings"'));
 	}
 	
 	/**
@@ -559,24 +559,28 @@ class Field_general_ext
       
     foreach ($query_weblogs->result as $weblog)
     {
-      $body .= $DSP->table_open(array('class' => 'tableBorder table-sortable', 'style' => 'margin-top: 18px; width: 100%;'));
+      $expanded = @$current['weblogs'][$weblog['weblog_id']]['expanded'] == 'y';
+      $table_class  = 'tableBorder table-sortable';
+      $table_class .= $expanded ? '' : ' collapsed'; 
+      
+      $body .= $DSP->table_open(array('class' => $table_class, 'style' => 'width: 100%;'));
   		
       // weblog headers
-      $expanded = @$current['weblogs'][$weblog['weblog_id']]['expanded'] == 'y';
       $body .= '<thead>';
-      $body .= $DSP->tr();    
+      $body .= '<tr class="weblog-head">';      
       $body .= $DSP->td('tableHeading', '', '3');
-      $body .= '<label class="expander" style="cursor:pointer; margin-right: 10px">' . $LANG->line('expand');
+      $body .= $weblog['blog_title'];
       
-      $body .= $DSP->input_checkbox('weblogs[' . $weblog['weblog_id'] . '][expanded]', 'y', ($expanded) ? 1 : 0);
+      $body .= '<label class="expander" style="cursor:pointer;">';
+      $body .= $LANG->line('toggle');
+      $body .= $DSP->input_checkbox('weblogs[' . $weblog['weblog_id'] . '][expanded]', 'y', ($expanded) ? 1 : 0);      
       $body .= '</label>';
       
-      $body .= $weblog['blog_title'];
       $body .= $DSP->td_c();
       $body .= $DSP->tr_c();
       
       // field group headers
-      $body .= $DSP->tr();
+      $body .= '<tr class="groups-head">';      
             
       $body .= $DSP->td('tableHeadingAlt', '5%');
       $body .= $LANG->line('order');
@@ -589,7 +593,7 @@ class Field_general_ext
       $body .= $DSP->tr_c();
       $body .= '</thead>';
       
-      $body .= '<tbody class="' . ($expanded ? 'expanded' : 'collapsed') . '">';
+      $body .= '<tbody>';
       
       $field_groups = $query_field_groups->result;
       $max = array();

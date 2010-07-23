@@ -23,6 +23,7 @@ $L = array(
   'yes'        		        => 'Yes',
   'no'        		        => 'No',
   'expand'                => 'Expand',
+  'toggle'                => 'click to toggle',
 // Fin.
 '' => ''
 );

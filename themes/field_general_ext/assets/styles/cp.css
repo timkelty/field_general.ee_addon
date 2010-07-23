@@ -5,14 +5,31 @@ table.table-sortable tbody tr.disabled td {
 	-moz-opacity: 0.5;
 	opacity: 0.5;
 	background-color: #eee;
-  
 }
-table.table-sortable thead .submit {
+table.table-sortable thead tr.weblog-head {
+  cursor: pointer;
+}
+ table.table-sortable tbody tr {
+   cursor: move;
+ }
+table.table-sortable thead .expander {
+  background: url('../../../cp_global_images/collapse.gif') no-repeat;
+  width: 10px;
+  height: 10px;
+  letter-spacing: -1em;
+  text-indent: -999em;
   float: right;
+}
+table.table-sortable.collapsed thead .expander {
+  background-image: url('../../../cp_global_images/expand.gif');
+}
+table.table-sortable thead .expander input {
+  display: none;
 }
 .tableCellTwo {
   background-color: #E5EAF0;
 }
-.table-sortable tbody.collapsed {
+.table-sortable.collapsed tbody,
+.table-sortable.collapsed tr.groups-head td {
   display: none;
 }
