@@ -1,6 +1,15 @@
 table.table-sortable tbody tr.disabled td {
-  -moz-opacity: .5;
-  -webkit-opacity: .5;
-  -o-opacity: .5;
-  opacity: .5;  
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
+	filter: alpha(opacity=50);
+	-khtml-opacity: 0.5;
+	-moz-opacity: 0.5;
+	opacity: 0.5;
+	background-color: #eee;
+  
+}
+table.table-sortable thead .submit {
+  float: right;
+}
+.tableCellTwo {
+  background-color: #E5EAF0;
 }

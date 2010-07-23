@@ -6,10 +6,8 @@ $(document).ready(function() {
     var $tbody = $(this);
     var $save = $('#save_settings').clone().attr('id', function() {
       this.id + index;
-    })
-    .wrap('<span class="defaultRight"></span>')
-      .parent();
-
+    });
+    
     $tbody.prev().find('td.tableHeading').append($save);
 
     // set "disabled" state of row based on checked radio
