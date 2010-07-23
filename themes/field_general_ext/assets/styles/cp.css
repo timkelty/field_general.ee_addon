@@ -1,0 +1,6 @@
+table.table-sortable tbody tr.disabled td {
+  -moz-opacity: .5;
+  -webkit-opacity: .5;
+  -o-opacity: .5;
+  opacity: .5;  
+}
