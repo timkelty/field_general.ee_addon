@@ -24,6 +24,7 @@ $L = array(
   'no'        		        => 'No',
   'expand'                => 'Expand',
   'toggle'                => 'click to toggle',
+  'edit'                  => 'Edit',
 // Fin.
 '' => ''
 );

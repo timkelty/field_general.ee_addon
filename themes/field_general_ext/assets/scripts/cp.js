@@ -53,7 +53,7 @@ $(document).ready(function() {
       containment: 'parent',
       axis: 'y',
       forcePlaceholderSize: true,
-      cancel: 'input, label',
+      cancel: 'input, label, a',
       cursor: 'move',
       stop: function(event, ui) {
 

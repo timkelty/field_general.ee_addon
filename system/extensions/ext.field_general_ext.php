@@ -128,6 +128,7 @@ class Field_general_ext
 		{
 		  // Initialise the settings URL.
   		$this->settings_url = BASE . AMP . 'C=admin' . AMP . 'M=utilities' . AMP . 'P=extension_settings' . AMP . 'name=' . $this->class_name;
+  		$this->field_editor_url = BASE . AMP . 'C=admin' . AMP . 'M=blog_admin' . AMP . 'P=field_editor' . AMP . 'group_id=';
 		}
 		 
 		if (isset($LANG))
@@ -642,8 +643,7 @@ class Field_general_ext
             }
           }
         }
-        
-        $body .= $DSP->qdiv('defaultBold', $field_group['group_name']);
+        $body .= $DSP->qdiv('defaultBold', '<a class="edit-group" href="' . $this->field_editor_url . $field_group['group_id'] . '">' . $field_group['group_name'] . '</a>');
         
         $body .= $DSP->td_c();
       
