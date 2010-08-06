@@ -1,0 +1,40 @@
+table.table-sortable tbody tr.disabled td {
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
+	filter: alpha(opacity=50);
+	-khtml-opacity: 0.5;
+	-moz-opacity: 0.5;
+	opacity: 0.5;
+	background-color: #eee;
+}
+table.table-sortable thead tr.weblog-head {
+  cursor: pointer;
+}
+table.table-sortable tbody tr {
+ cursor: move;
+}
+table.table-sortable thead .expander {
+  background: url('../../../cp_global_images/collapse.gif') no-repeat;
+  width: 10px;
+  height: 10px;
+  letter-spacing: -1em;
+  text-indent: -999em;
+  float: right;
+}
+table.table-sortable.collapsed thead .expander {
+  background-image: url('../../../cp_global_images/expand.gif');
+}
+table.table-sortable thead .expander input {
+  display: none;
+}
+.tableCellTwo {
+  background-color: #E5EAF0;
+}
+.table-sortable.collapsed tbody,
+.table-sortable.collapsed tr.groups-head td {
+  display: none;
+}
+table.table-sortable tbody tr.ui-sortable-helper {
+     -moz-box-shadow: 0px 1px 4px rgba(0, 0, 0, .5); /* FF3.5+ */
+  -webkit-box-shadow: 0px 1px 4px rgba(0, 0, 0, .5); /* Saf3.0+, Chrome */
+          box-shadow: 0px 1px 4px rgba(0, 0, 0, .5); /* Opera 10.5, IE 9.0 */ 
+}

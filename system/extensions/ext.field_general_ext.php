@@ -18,7 +18,7 @@ if ( ! defined('EXT'))
 
 if ( ! defined('F_GEN_version'))
 {
-	define('F_GEN_version', '1.0.0');
+	define('F_GEN_version', '1.0.2');
 	define('F_GEN_docs_url', '');
 	define("F_GEN_name", "Field General");
 }
@@ -128,6 +128,7 @@ class Field_general_ext
 		{
 		  // Initialise the settings URL.
   		$this->settings_url = BASE . AMP . 'C=admin' . AMP . 'M=utilities' . AMP . 'P=extension_settings' . AMP . 'name=' . $this->class_name;
+  		$this->field_editor_url = BASE . AMP . 'C=admin' . AMP . 'M=blog_admin' . AMP . 'P=field_editor' . AMP . 'group_id=';
 		}
 		 
 		if (isset($LANG))
@@ -224,7 +225,7 @@ class Field_general_ext
 			array(
 				'class' 	=> 'tableBorder',
 				'border' 	=> '0',
-				'style' 	=> 'width : 100%; margin-top : 1em;',
+				'style' 	=> 'width : 100%; ',
 				)
 			);
 			
@@ -274,7 +275,7 @@ class Field_general_ext
 	{
 	  global $DSP, $LANG;
 	  
-		return $DSP->qdiv('itemWrapperTop', $DSP->input_submit($LANG->line('save_settings'), 'save_settings', 'id="save_settings"'));
+		return $DSP->qdiv('box itemWrapperTop', $DSP->input_submit($LANG->line('save_settings'), 'save_settings', 'id="save_settings"'));
 	}
 	
 	/**
@@ -433,12 +434,8 @@ class Field_general_ext
     $groups = $this->settings[$this->site_id]['weblogs'][$CURRENT_WEBLOG_ID]['field_groups'];
     $groups_filtered = array();
     
-    // sort groups by order
-    function _sort_groups($a, $b) {
-      return ($a['order'] < $b['order']) ? -1 : 1;
-    }
-    uasort($groups, '_sort_groups');
-    
+    uasort($groups, array($this, '_sort_groups'));
+
     // build string
     foreach($groups as $gk => $gv)
     {
@@ -563,17 +560,28 @@ class Field_general_ext
       
     foreach ($query_weblogs->result as $weblog)
     {
-      $body .= $DSP->table_open(array('class' => 'tableBorder', 'style' => 'margin-top: 18px; width: 100%;'));
+      $expanded = @$current['weblogs'][$weblog['weblog_id']]['expanded'] == 'y';
+      $table_class  = 'tableBorder table-sortable';
+      $table_class .= $expanded ? '' : ' collapsed'; 
+      
+      $body .= $DSP->table_open(array('class' => $table_class, 'style' => 'width: 100%;'));
   		
       // weblog headers
-      $body .= $DSP->tr();    
+      $body .= '<thead>';
+      $body .= '<tr class="weblog-head">';      
       $body .= $DSP->td('tableHeading', '', '3');
       $body .= $weblog['blog_title'];
+      
+      $body .= '<label class="expander" style="cursor:pointer;">';
+      $body .= $LANG->line('toggle');
+      $body .= $DSP->input_checkbox('weblogs[' . $weblog['weblog_id'] . '][expanded]', 'y', ($expanded) ? 1 : 0);      
+      $body .= '</label>';
+      
       $body .= $DSP->td_c();
       $body .= $DSP->tr_c();
       
       // field group headers
-      $body .= $DSP->tr();
+      $body .= '<tr class="groups-head">';      
             
       $body .= $DSP->td('tableHeadingAlt', '5%');
       $body .= $LANG->line('order');
@@ -584,15 +592,43 @@ class Field_general_ext
       $body .= $DSP->td_c();
             
       $body .= $DSP->tr_c();
+      $body .= '</thead>';
+      
+      $body .= '<tbody>';
+      
+      $field_groups = $query_field_groups->result;
+      $max = array();
+      
+      // merge in order and active from settings, find max order
+      foreach ($field_groups as $k => $v)
+      {
+        $field_groups[$k]['order'] = @$current['weblogs'][$weblog['weblog_id']]['field_groups'][$v['group_id']]['order'];
+        $field_groups[$k]['active'] = @$current['weblogs'][$weblog['weblog_id']]['field_groups'][$v['group_id']]['active'];
+        $max[] = $field_groups[$k]['order'];
+      }
+      $max = max($max);
+      
+      // add max if there is none
+      foreach ($field_groups as $k => $v)
+      {
+        if ( ! $v['order'])
+        {
+          $max++;
+          $field_groups[$k]['order'] = $max;
+        }
+      }
+      
+      // sort by order
+      uasort($field_groups, array($this, '_sort_groups'));
       
       // field group row
-      foreach ($query_field_groups->result as $field_group) {
+      foreach ($field_groups as $field_group) {
         $stripe_class = (@$stripe_class == 'tableCellOne') ? 'tableCellTwo': 'tableCellOne';
-        $fg_settings = @$current['weblogs'][$weblog['weblog_id']]['field_groups'][$field_group['group_id']];
+        
         $body .= $DSP->tr();
         
         $body .= $DSP->td($stripe_class, '5%');
-        $body .= $DSP->input_text('weblogs[' . $weblog['weblog_id'] . '][field_groups][' . $field_group['group_id'] . '][order]', $fg_settings['order'], '4', '' , '', '30px');
+        $body .= $DSP->input_text('weblogs[' . $weblog['weblog_id'] . '][field_groups][' . $field_group['group_id'] . '][order]', $field_group['order'], '4', '' , 'sequence', '30px');
         $body .= $DSP->td_c();
         
         $body .= $DSP->td($stripe_class);
@@ -607,23 +643,23 @@ class Field_general_ext
             }
           }
         }
-        
-        $body .= $DSP->qdiv('defaultBold', $field_group['group_name']);
+        $body .= $DSP->qdiv('defaultBold', '<a class="edit-group" href="' . $this->field_editor_url . $field_group['group_id'] . '">' . $field_group['group_name'] . '</a>');
         
         $body .= $DSP->td_c();
       
         $body .= $DSP->td($stripe_class);
         
         $body .= '<label style="cursor:pointer; margin-right: 10px">' . $LANG->line('on');
-        $body .= $DSP->input_radio('weblogs[' . $weblog['weblog_id'] . '][field_groups][' . $field_group['group_id'] . '][active]', 'y', ($fg_settings['active'] == 'y') ? 1 : 0);
+        $body .= $DSP->input_radio('weblogs[' . $weblog['weblog_id'] . '][field_groups][' . $field_group['group_id'] . '][active]', 'y', ($field_group['active'] == 'y') ? 1 : 0);
         $body .= '</label><label style="cursor:pointer">' . $LANG->line('off');
-        $body .= $DSP->input_radio('weblogs[' . $weblog['weblog_id'] . '][field_groups][' . $field_group['group_id'] . '][active]', 'n', ($fg_settings['active'] != 'y') ? 1 : 0);
+        $body .= $DSP->input_radio('weblogs[' . $weblog['weblog_id'] . '][field_groups][' . $field_group['group_id'] . '][active]', 'n', ($field_group['active'] != 'y') ? 1 : 0);
         $body .= '</label>';
         $body .= $DSP->td_c();
 
         $body .= $DSP->tr_c();
       }
-            
+      $body .= '</tbody>';
+      $body .= $DSP->table_close();
     }
 	  
     // Check for updates / save settings.
@@ -638,6 +674,12 @@ class Field_general_ext
 		$DSP->crumbline 		= TRUE;
 		$DSP->crumb 				= $breadcrumbs;
 		$DSP->body 					= $body;
-	}	
+	}
+	
+	// sort groups by order
+  function _sort_groups($a, $b) {
+    return ($a['order'] < $b['order']) ? -1 : 1;
+  }
+  	
 }
 ?>
