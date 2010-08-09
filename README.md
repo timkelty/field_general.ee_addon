@@ -15,7 +15,7 @@ While the publish form in EE2 is much more easily customized, the same problem e
 ## † Using Fields across MSM sites
 While Field General has no problem assigning custom weblog fields and displaying them across MSM sites in the control panel, unfortunately the weblog module has a bit of trouble with this. While its query gets all fields from all sites, when it parses the custom field tags, it only parses those from the site matching that of the entry it is displaying. Until I can find a better solution, there is a small hack to `mod.weblog.php` that will allow this.
 
-Around line `451` in `mod.weblog.php` *(ExpressionEngine 1.6.9)*, look for:
+Around line `4512` in `mod.weblog.php` *(ExpressionEngine 1.6.9)*, look for:
 
       /** ----------------------------------------
       /**  parse custom weblog fields
