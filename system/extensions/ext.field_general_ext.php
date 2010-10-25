@@ -19,7 +19,7 @@ if ( ! defined('EXT'))
 if ( ! defined('F_GEN_version'))
 {
 	define('F_GEN_version', '1.0.2');
-	define('F_GEN_docs_url', '');
+	define('F_GEN_docs_url', 'http://github.com/timkelty/field_general.ee_addon');
 	define("F_GEN_name", "Field General");
 }
 
@@ -181,7 +181,7 @@ class Field_general_ext
 		// Register a new source.
 		if ($this->settings[$this->site_id]['update_check'] == 'y')
 		{
-			$sources[] = 'http://github.com/timkelty/field_general.ee_addon/raw/master/versions.xml';
+			$sources[] = 'http://labs.fusionary.com/ee/versions.xml';
 		}
 		
 		return $sources;
